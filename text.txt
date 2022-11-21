@@ -1,0 +1,93 @@
+Hostname of VM: rreis-de42 My login followed by 42
+10000 MB of memory allocated to the VM
+Create virtual hard disk (virtual disk image) with dynamically allocated size of 8 GB
+VM is created
+Setting -> Storage to check your VMs storage
+Click on optical disk and select your VM file (.iso file)
+Click Start to start the VM
+username: rreis-de
+Partition disk - use entire disk and set up encrypted LVM
+Passwords: my intra password
+
+"lsblk" is a command used to display details about block devices
+
+SUDO
+
+"su -" su is a command used to switch to another user. if executed without a username, it will login as root user
+We are now in /root
+"apt install sudo" apt - advanced packaging tool. It's designed to handle software installation and removal. It is a command-line tool with no GUI. Whenever invoked from command line along with the name of the package to be installed, it finds that package along with the list of its dependencies and automatically installs them thus lettig users not worry of installing dependencies. Aptitude is a front-end advanced packaging tool, adding a user interface to the funcionality. Aptitude is a high-level packaging manager while APT is a lower-leval packaging manager. High level language is easily understandable by humans, while low level language is understandable by machines. sudo (superuser do) is a program that enables users to run programs with the security privileges of another user, by default the superuser. 
+"dpkg -l | grep sudo" dpkg is a tool to install, build, remove and manage Debian packages. -l option lists packages matching given pattern. | (Pipe) is a form  of redirection used in Unix-like OS to send output of one command/program/process to another for further processing. It's used to combine two or more commands; the output of one command acts and the input to another command. This direct connection allows the commands to operate simultaneously and permits data to be transferred between them continuously. Pipes are unidirectional, data flows from left to right through the pipeline. grep searches for patterns in each file. it prints each lne that matches a pattern.
+"adduser rreis-de sudo" adduser is a command to add a new user to the current linux machine. By default, a group will also be created for the new user. sudo group is a group of superusers that have privileged access to root commands.
+User rreis-de was added to the sudo group.
+"getent group sudo" getent is a command that helps the user to get the entires in a database. It's a comon way to look up in user details on Linux. If one or more key arguments are provided, then only the entires that match the supplied keys will be displayed. "reboot" to reboot the system you need to be signed in the root account, which I already am. You need to reboot for changes to take effect.
+"sudo -v" update the user's cached credetials, authenticating the user if necessary. cache s a high speed data storage layer with stores a subset of data, transient in nature, so that future requests of that data are served up faster than by accessing the data's primary storage location. authentication is the system administration term for logging into the system.
+User rreis-de now has sudo priviliges updated. From now on, run root-privileged commands via prefix "sudo"
+"sudo apt update" updates the package sources lits with the lastest versions of the packages in the repositories.
+"sudo vi /etc/sudoers.d/sudofile" vi ia screen-oriented text editor created for Unix OS. Inside the file, write in the 1st line:
+"Defaults	passwd_tries=3" this limits authentication using sudo to 3 attempts in the event of an incorrent password. In the 2nd line:
+"Defaults	badpass_message="Incorrect Passoword" adds a custom error message in the event of an incorrect password
+"sudo mkdir /var/log/sudo" creates a directory named 'sudo' inside the 'log' directory"sudo vi /var/log/sudo/sudolog" creates and opens file named 'sudolog'
+Inside the file write:
+"Defaults	logfile="/var/log/sudo/sudolog" this logs all sudo commands to this file; logs provide a timeline of events for the Linux OS and are a valuable troubleshooting tool.
+"Defaults	log_input,log_output"
+"Defaults	iolog_dir=/var/log/sudo" Archives all sudo inputs and ouputs to this directory.
+"Defaults	requiretty" requires TTY. tty command is used to check if the output medium is a terminal. the command prints the file name of the terminal connected to stdin.
+
+SSH
+
+"sudo apt install openssh-server" OpenSSH is a suite of secure networking utilities based on the Secure Shell protocol, which provides a secure channel over an unsecure network in a client-server architecture. A computer network is a set of computers sharing resources located on or provided by network nodes. The computers use common communications protocols over digital interconnections to communicate with each other.
+"dpkg -l | grep ssh" verify if openssh-server was successfully installed
+"sudo vi /etc/ssh/sshd_config" opens 'sshd_config' file on given directory
+Replace line "#Port 22" with "Port 4242". SSH Port is used for SSH communications and allows remote administration access to the VM.
+Replace line "#PermitRootLogin prohibit-password" with "PermitRootLogin no". this disables ssh login as root.
+"sudo service ssh status" check SSH status
+"sudo apt install ufw" installs ufw. A firewall is a network security system that monitors and controls incoming and outgoing newtwork traffic based on predetermined security rules. UFW (Uncomplicated Firewall) is a program for managing a netfilter firewall designed to be easy to use.
+"dpkg -l | grep ufw" check whether ufw was sucessfully installed.
+"sudo ufw enable" enable firewall
+"sudo ufw allow 4242" allow incomming connections using Port 4242
+"sudo ufw status" check ufw status
+"hostname -I" get ip address
+"ssh rreis-de@10.12.179.82 -p 4242" connect to a server via ssh. ssh is a program for logging into a remote machine and for executing commands on a remote machine. ssh connects and logs into the specified destination. -p specifies the port to connect to on the remote host.
+"exit" terminate SSH session
+
+USER MANAGEMENT
+
+"sudo vi /etc/login.defs" open the file in given directory
+Replace line "PASS_MAX_DAYS 99999" with "PASS_MAX_DAYS 30" to set password to expire every 30 days, instead of 99999
+Replace line "PASS_MIN_DAYS 0" with "PASS_MIN_DAYS 2" to srt the minimum number of days between password changes to 2 instead of 0
+Keep line "PASS_WARN_AGE 7" to send the user a warning 7 days before password expiry
+"sudo apt install libpam-pwquality" this package's purpose is to provide common functions for password quality checking and also score them based on their apparent randomness.
+"dpkg -l | grep libpam-pwquality" check whether the package was successfully installed
+"sudo vi /etc/pam.d/common-password" open the file on given directory
+In the line "password	requisite	pam_pwquality.so retry=3" add:
+"minlen=19" to set password minimum length to 10 characters
+"ucredit=-1 dcredit=-1" to require password to cotain at least an uppercase letter and a numeric character
+"maxrepeat=3" to set a maximum of 3 consecutive identical characters
+"reject_username" to reject the password if it contains the username in some form
+"difok = 7" to set the number of changes required in the new password from the old to 7
+"enforce_for_root" to implement the same policy on root
+"sudo adduser newuser" create newuser named 'newuser'
+"getent passwd newuser" displays the entry 'newuser' in the 'passwd' database
+"sudo chage -l newuser" chage command changes the number of days between password changes and the date of the last password change. -l flag shows account aging information
+"sudo addgroup user42" create new group named 'user42'
+"sudo adduser rreis-de user42" adds user 'rreis-de' to group 'user42'
+"getent group user42" displays the entry 'user42' in database 'group' to verify whether rreis-de was successfully added to user42 group
+
+CRON
+
+cron command-line utility is a job-scheduler on Unix OS. Users use it to schedule jobs, to run periodically at fixed times, dates or intervales.
+"sudo crontab -u root -e" crontab file contains instructions for the cron daemon. "-u root -e" user root edit. configure cron as root user.
+Replace line "m h  dom mon dow   command" with "*/10 * * * * sh /path/to/script" to run a shell script to run every 10 minutes" crontab syntax: "Minute(0-59) Hour(0-23) DayofMonth(1-31) Month(1-12) DayofWeek(0-7) command(s)" * means any values or always. / allows you to specify values that will be repeated over a certain interval between them. */10 means always with intervales of 10 minutes. sh executes commands read from a command line string.
+"sudo crontab -u root -l" -l flag lists the allowed commands for the invoked or specified user. in this case the root commands concerning cron jobs listed in the crontab file.
+
+MONITORING
+
+Bash is an sh-compatible command language interpreter that executes commands read from the standard input or from a file. Create a script named 'monitoring.sh'. At server-startup, the script will display some info on all terminals every 10 minutes.
+
+"#!bin/bash" executes the script using the bash shell
+"uname -a" uname prints certain system information. -a flag prints all info
+"lscpu | grep "Socket" | cut -d " " -f 24" lscpu displays info about the CPU architecture. One socket is one physical CPU package. cut removes sections from each line, -d flag sets a delimiter, -f selects only these fields
+"lscpu | grep "CPU(s)" | head -n 1 | cut -d " " -f 27" head outputs the first part of a file, -n flag prints the first NUM lines of the file
+"free -m | grep Mem | awk '{print $2}'" free displays amount of free and used memory in the system , -m displays it in megabytes. awk is a command that scans patterns and executes the associated action with that pattern.
+"free -m | grep Mem | awk '{print $3}'"
+"free -m | grep Mem | awk '{printf("%.2f", $3/$2*100)}'" .2f tells printf to print a floating point value with 2 decimal places
