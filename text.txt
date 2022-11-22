@@ -91,3 +91,16 @@ Bash is an sh-compatible command language interpreter that executes commands rea
 "free -m | grep Mem | awk '{print $2}'" free displays amount of free and used memory in the system , -m displays it in megabytes. awk is a command that scans patterns and executes the associated action with that pattern.
 "free -m | grep Mem | awk '{print $3}'"
 "free -m | grep Mem | awk '{printf("%.2f", $3/$2*100)}'" .2f tells printf to print a floating point value with 2 decimal places
+"df -Bg | grep '^/dev/' | grep -v '/boot$' | awk '{td+=$2} END {print td}'" df displays the amount of disk space available. -B sacles sizes by SIZES unit. -Bg scales by gigabytes. grep -v inverts the sense of matching, to select non-matching lines. ^ and $ forces to string to completely match pattern.
+"df -Bg | grep '^/dev/' | grep -v '/boot$' | awk '{ud+=$3} END {print ud}'"
+"df -Bg | grep '^/dev/' | grep -v '/boot$' | awk '{td+=$2} {ud+=$3} END {printf("%d", ud/td*100)}'"
+"uptime | awk '{printf("%.1f%%", $(NF-2)})'" uptime gives a one line display with the following info: current time, how long the system has been running, how many users are logged on, the system load averages for the past 1, 5 and 15 min. NF is an awk built in variables givinf the total number of fields in a record.
+"lsblk | grep "lvm" | wc -l"
+"if($lvma==0); then echo 'no'; else echo 'yes'; fi"
+net tools is a collection of programs for controlling the network subsystem of the linux kernel
+"cat /proc/net sockstat sockstat6 | grep "TCP:" | cut -d " " -f 3" proc file contains useful infro about the processes currenlty running, it is a control and information center for kernel.
+"users | wc -l" users displays the user names of users currently logged in to the current host
+"hostname -I" hostname displays the system's host name; -I shows network IP
+"ip link show | awk '$1 == "link/ether" {print $2}'" ip link show shows network device configuration
+"journalctl | grep sudo | grep COMMAND | wc -l" journalctl queries the systemd journal
+wall is a command-line utility that displays a message on the teminals of all logged users
