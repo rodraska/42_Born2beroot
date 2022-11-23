@@ -1,6 +1,6 @@
 #!bin/bash
 archi=$(uname -a)
-pcpu=$(lscpu | grep "Socket" | cut -d " " -f 24)
+phycpu=$(lscpu | grep "Socket" | cut -d " " -f 24)
 vcpu=$(lscpu | grep "CPU(s)" | head -n 1 | cut -d " " -f 27)
 tram=$(free -m | grep Mem | awk '{print $2}')
 uram=$(free -m | grep Mem | awk '{print $3}')
@@ -13,20 +13,20 @@ lb=$(who -b | cut -d " " -f 13-14)
 lvma=$(lsblk | grep "lvm" | wc -l)
 lvms=$(if [ $lvma -eq 0 ]; then echo 'no'; else echo 'yes'; fi)
 #install net-tools
-acnt=$(cat /proc/net sockstat sockstat6 | grep "TCP:" | cut -d " " -f 3)
+acnt=$(cat /proc/net/sockstat{,6} | grep "TCP:" | cut -d " " -f 3)
 ausr=$(users | wc -l)
 ip=$(hostname -I)
 mac=$(ip link show | awk '$1 == "link/ether" {print $2}')
 nsudo=$(journalctl | grep sudo | grep COMMAND | wc -l)
 wall "#Architecture: $archi
-      #CPU physical : $pcpu
-      #vCPU : $vcpu
-      #Memory Usage: $uram/$tram ($pram%)
-      #Disk Usage: $udisk/$tdisk ($pdisk%)
-      #CPU load: $pcpu%
-      #Last boot: $lb
-      #LVM use: $lvms
-      #Connections TCP : $acnt ESTABLISHED
-      #User log: $ausr
-      #Network: $ip ($mac)
-      #Sudo : $nsudo cmd"
+#CPU physical : $phycpu
+#vCPU : $vcpu
+#Memory Usage: $uram/${tram}Mb ($pram%)     
+#Disk Usage: $udisk/${tdisk}Gb ($pdisk%)            
+#CPU load: $pcpu
+#Last boot: $lb
+#LVM use: $lvms
+#Connections TCP : $acnt ESTABLISHED
+#User log: $ausr
+#Network: IP $ip($mac)
+#Sudo : $nsudo cmd"
