@@ -9,6 +9,27 @@ username: rreis-de
 Partition disk - use entire disk and set up encrypted LVM
 Passwords: my intra password
 
+Uma Virtual Machine consiste na virtualizacao/emulacao do hardware de um computador (CPU, memoria, hard disk) num ambiente de execucao separado do resto do computador com o seu proprio sistema operativo, criando a ilusao de que a virtual machine e um computador de facto.
+
+O Kernel e um programa central ao funcionanto de um sistema operativo,e a unica porcao deste que esta sempre presente na memoria e o primeiro programa a carregar quando se inicia o sistema. Geralmente ele tem completo controlo sobre tudo no sistema, facilita interacoes entre as componentes de hardware e software e arbitra conflitos relativos ao uso e alocacao de recursos.
+
+O CentOS e o Debian sao duas distribuicoes diferentes do Linux. O CentOS e uma downstream distribution da red hat linux, enquanto que o Debian e uma upstream distribution na qual outras distribuicoes sao baseadas tal como o Ubuntu. Enquanto que o Debian tem uma friendly user-interface, e e atualizado regularmente a cada 2 ou 3 anos e e suportado essencialmente por uma comunidade o CentOS tem um bom suporte para software de empresas, ja q e suportado pela red hat entreprise, e atualizado apenas a cada 10 anos o que significa que e mais instavel mas por outro lado cada versao e bastante robusta e completa. O CentOS usa o RPM package format, e o YUM/DNF como package manager e o Debian usa o DBM package format e o dpkg/APT como package manager. Em conclusao, o CentOS e mais indicado para correr software empresarial enquanto que o Debian e a melhor escolha para instalar um sistema operativo num desktop pessoal e usa-lo duma forma facil e intuitiva. 
+
+O interesse e as virtudes duma Maquina Virtual e podermos escolher o sistema operativo em que corre, independentemente do sistema operativo do nosso computador, e podermos alocar lhe recursos consoante as nossas preferencias e o tipo de atividades que temos em mente para a nossa VM.
+
+O apt (advanced packaging tool) e o Aptitude sao ambos softwares com o objetivo de lidar com a instalcao, remocao e fe gestao de software e packages. o apt e uma lower-level packaaging manager tendo apenas uma command-line tool sem GUI, enquanto que o aptitude e uma higher-level packaging manager oferecendo tanto uma command line utility como uma graphical interface com a qual os users podem interagir. ambas instalam a package indicada pelo user, em conjunto com as todas as dependencies.
+
+APPArmor e um programa do linux kernel, que permite ao administrador do sistema restringir as capacidades e autorizacoes de programas.
+
+LVM (Logic Volume Manager) e um device mapper,  utilizado para gerir as unidades de LV(Logical Volumes) em linux. Ele funciona mapeando physical block devices e organiz os em virtual block devices. Sao criados VG (Volume Groups) a partir de um physical volume existente no hardware do computador. Esses VGs servem de container para os LVs. Cada LV e composto por varios PEs(Physical Extents), que e o espaco de volume contiguo mais pequeno num PV que e possivel atribuir a um LV. Existem algumas vantagens ao usar LVs em vez de hard drive partitions: os LVs podem ir buscar memoria a varios discos diferentes, podemos mudar o seu tamano dinamicamente consoante a enchemos e podemos mudar o seu volume manualmente.
+
+SUDO (superuser do) e um programa para sistemas operativos linux e unix que permitem a um user correr programas com os privilegios de outro user, por default o superuser, que tem privilegios de correr programas no root.
+
+UFW e um programa para gerir uma netfilter firewall, projetado para ser facil de utilizar. Uma firewall e um sistema de seguranca de redes que controla o trafico de entrada e saida duma rede, segundo determinadas regras. Uma firewall estabelece uma barreira entre uma trusted network e uma untrusted network, como a internet.
+
+SSH (Secure Shell) refere-se tanto a protocolo de redes, que permite aos users e administradores de sistemas, uma forma segura de acederem a um computador atraves duma rege insegura como a suite de utilidades que implementam o dado protocolo. O SSH tem funcoes que permitem aos seus utilizadores: aceder remotamente a outro computador a um sistema de redes, transferir ficheiros, executar comandos remotamente e gerir um sistema de redes, tudo de forma segura.
+
+ 
 "lsblk" is a command used to display details about block devices. A block device is used to describe a device that provides persistent data storage.
 
 SUDO
